@@ -1,4 +1,4 @@
-# Sprint 04 Project
+# Sprint 05 Project
 > Vehicle classification from images
 
 ## 1. Install
