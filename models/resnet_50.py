@@ -1,4 +1,7 @@
 from utils.data_aug import create_data_aug_layer
+from tensorflow import keras
+from tensorflow.keras import layers, models
+from tensorflow import float32
 
 
 def create_model(
@@ -68,18 +71,23 @@ def create_model(
         # Use keras.layers.Input(), following this requirements:
         #   1. layer dtype must be tensorflow.float32
         # TODO
-        input = None
+        input = layers.Input(shape=input_shape, dtype = float32)
 
         # Create the data augmentation layers here and add to the model next
         # to the input layer
         # If no data augmentation was used, skip this
-        # TODO
+        x = False
+        if(data_aug_layer is not None):
+            data_augmentation = create_data_aug_layer(data_aug_layer)
+            x = data_augmentation(input)
 
         # Add a layer for preprocessing the input images values
         # E.g. change pixels interval from [0, 255] to [0, 1]
         # Resnet50 already has a preprocessing function you must use here
         # See keras.applications.resnet50.preprocess_input()
-        # TODO
+        x = input if(x is False) else x
+        #x = keras.applications.resnet50.preprocess_input(x)
+        x = keras.applications.resnet50.preprocess_input(x)
 
         # Create the corresponding core model using
         # keras.applications.ResNet50()
@@ -87,28 +95,37 @@ def create_model(
         #   1. Use imagenet weights
         #   2. Drop top layer (imagenet classification layer)
         #   3. Use Global average pooling as model output
-        # TODO
+        base_model = keras.applications.ResNet50(
+                   include_top=False,
+                   pooling='avg',
+                   weights='imagenet')
+           
+        base_model.trainable = False
+
+        x = base_model(x, training=False)
 
         # Add a single dropout layer for regularization, use
         # keras.layers.Dropout()
         # TODO
+        x = layers.Dropout(dropout_rate)(x)
 
         # Add the classification layer here, use keras.layers.Dense() and
         # `classes` parameter
         # Assign it to `outputs` variable
         # TODO
-        outputs = None
+        outputs = layers.Dense(classes, activation='softmax')(x)
 
         # Now you have all the layers in place, create a new model
         # Use keras.Model()
         # Assign it to `model` variable
         # TODO
-        model = None
+        model = keras.Model(input, outputs)
+        
     else:
         # For this particular case we want to load our already defined and
         # finetuned model, see how to do this using keras
         # Assign it to `model` variable
         # TODO
-        model = None
+        model = models.load_model(weights)
 
     return model
