@@ -8,3 +8,4 @@ pyyaml==6.0
 scipy==1.8.0
 scikit-learn==1.0.2
 tqdm==4.63.1
+protobuf~=3.19.0
