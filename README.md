@@ -1,4 +1,4 @@
-# Sprint 04 Project
+# Sprint 05 Project
 > Vehicle classification from images
 
 ## 1. Install
@@ -8,26 +8,28 @@ You can use `Docker` to easily install all the needed packages and libraries. Tw
 - **CPU:**
 
 ```bash
-$ docker build -t s04_project -f docker/Dockerfile .
+$ docker build -t s05_project -f docker/Dockerfile .
 ```
 
 - **GPU:**
 
 ```bash
-$ docker build -t s04_project -f docker/Dockerfile_gpu .
+$ docker build -t s05_project -f docker/Dockerfile_gpu .
 ```
 
 ### Run Docker
 
 ```bash
-$ docker run --rm --net host --gpus all -it \
+# $ docker run --rm --net host --gpus all -it \
+$ docker run --rm --net host -it \
     -v $(pwd):/home/app/src \
     --workdir /home/app/src \
-    s04_project \
+    s05_project \
     bash
 ```
 
 ### Run Unit test
+
 
 ```bash
 $ pytest tests/
@@ -41,8 +43,8 @@ As a first step, we must extract the images from the file `car_ims.tgz` and put 
 data/
     ├── car_dataset_labels.csv
     ├── car_ims
-    │   ├── 000001.jpg
-    │   ├── 000002.jpg
+    │   ├── 000001.jpg
+    │   ├── 000002.jpg
     │   ├── ...
 ```
 
