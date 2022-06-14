@@ -23,6 +23,9 @@ for file in bucket.objects.all():
 with open('training_image_set.tgz', 'wb') as data:
     bucket.download_fileobj('training-datasets/car_ims.tgz', data)
 
+# download the dataset labels
+with open('car_dataset_labels.csv', 'wb') as data:
+    bucket.download_fileobj('training-datasets/car_dataset_labels.csv', data)
 # upload a file
 #with open('sample.png', 'rb') as data:
 #    bucket.upload_fileobj(data, 'raf/sample.png')
