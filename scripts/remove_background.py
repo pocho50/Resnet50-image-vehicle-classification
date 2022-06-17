@@ -9,6 +9,9 @@ same directory structure with its subfolders but with new images.
 """
 
 import argparse
+import os, cv2
+from utils import utils as u, detection
+from PIL import Image
 
 
 def parse_args():
@@ -59,6 +62,23 @@ def main(data_folder, output_data_folder):
     #      `data_folder` structure.
     # TODO
 
+    os.makedirs(output_data_folder, exist_ok=True)
+    for dirpath, filename in u.walkdir(data_folder):
+        subset_name = os.path.basename(os.path.dirname(dirpath))
+        class_name = os.path.basename(os.path.dirname(os.path.join(dirpath, filename)))
+        os.makedirs(os.path.join(output_data_folder, subset_name), exist_ok=True)
+        os.makedirs(os.path.join(output_data_folder, subset_name, class_name), exist_ok=True)
+
+        if(os.path.exists(os.path.join(output_data_folder, subset_name, class_name, filename))): continue
+
+        img_array = cv2.imread(os.path.join(dirpath, filename))
+
+        box_coordinates = detection.get_vehicle_coordinates(img_array)
+
+        new_img_array = img_array[box_coordinates[1]:box_coordinates[3], box_coordinates[0]:box_coordinates[2],:]
+        new_img = Image.fromarray(new_img_array)
+        new_img.save(os.path.join(output_data_folder, subset_name, class_name, filename))
+        
 
 if __name__ == "__main__":
     args = parse_args()
