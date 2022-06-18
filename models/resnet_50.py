@@ -9,7 +9,7 @@ def create_model(
     dropout_rate: float = 0.0,
     data_aug_layer: dict = None,
     classes: int = None,
-    regulizer: dict = None
+    regulizer: float = 0.001
 ):
     """
     Creates and loads the Resnet50 model we will use for our experiments.
@@ -70,23 +70,21 @@ def create_model(
         # Assign it to `input` variable
         # Use keras.layers.Input(), following this requirements:
         #   1. layer dtype must be tensorflow.float32
-        # TODO
         input = layers.Input(shape=input_shape, dtype = float32)
 
         # Create the data augmentation layers here and add to the model next
         # to the input layer
         # If no data augmentation was used, skip this
-        x = False
         if(data_aug_layer is not None):
             data_augmentation = create_data_aug_layer(data_aug_layer)
             x = data_augmentation(input)
+        else:
+            x = input
 
         # Add a layer for preprocessing the input images values
         # E.g. change pixels interval from [0, 255] to [0, 1]
         # Resnet50 already has a preprocessing function you must use here
         # See keras.applications.resnet50.preprocess_input()
-        x = input if(x is False) else x
-        #x = keras.applications.resnet50.preprocess_input(x)
         x = keras.applications.resnet50.preprocess_input(x)
 
         # Create the corresponding core model using
@@ -106,14 +104,12 @@ def create_model(
 
         # Add a single dropout layer for regularization, use
         # keras.layers.Dropout()
-        # TODO
         x = layers.Dropout(dropout_rate)(x)
 
         # Add the classification layer here, use keras.layers.Dense() and
         # `classes` parameter
         # Assign it to `outputs` variable
-        # TODO
-        outputs = layers.Dense(classes, activation='softmax', kernel_regularizer=regularizers.L2(**regulizer))(x)
+        outputs = layers.Dense(classes, activation='softmax', kernel_regularizer=regularizers.L2(regulizer))(x)
 
         # Now you have all the layers in place, create a new model
         # Use keras.Model()
