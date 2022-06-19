@@ -164,8 +164,7 @@ def predict_from_folder(folder, model, input_size, class_names):
 
         # Get the position with highest score in output predictions
         max_idx = np.argmax(pred)
-        # Get the max score
-        max_score = pred[0][max_idx]
+        
         # Get the class name
         predicted_class = class_names[max_idx]
 

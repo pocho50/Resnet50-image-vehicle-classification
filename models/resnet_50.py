@@ -97,8 +97,6 @@ def create_model(
                    include_top=False,
                    pooling='avg',
                    weights='imagenet')
-           
-        #base_model.trainable = False
 
         x = base_model(x)
 
