@@ -3,6 +3,7 @@ import yaml
 import tensorflow as tf
 import numpy as np
 
+
 def validate_config(config):
     """
     Takes as input the experiment configuration as a dict and checks for
@@ -40,11 +41,11 @@ def load_config(config_file_path):
         Experiment settings as a Python dict.
     """
     # TODO
-    # Load config here and assign to `config` variable
-    with open(config_file_path, 'r') as stream:
+    # Load config here and assign to `config` variable
+    with open(config_file_path, "r") as stream:
         config = yaml.safe_load(stream)
 
-    # Don't remove this as will help you doing some basic checks on config
+    # Don't remove this as will help you doing some basic checks on config
     # content
     validate_config(config)
 
@@ -141,21 +142,18 @@ def predict_from_folder(folder, model, input_size, class_names):
     # class. You must take the position of the element in the vector with
     # the highest probability and use that to get the corresponding class
     # name from `class_names` list.
-    # TODO
     predictions = []
     labels = []
 
     for dirpath, filename in walkdir(folder):
-        
+
         # image path
         img_path = os.path.join(dirpath, filename)
 
         # get label name
         label_name = os.path.basename(os.path.dirname(img_path))
 
-        img = tf.keras.utils.load_img(
-            img_path, target_size=(input_size)
-        )
+        img = tf.keras.utils.load_img(img_path, target_size=(input_size))
 
         img_array = tf.keras.utils.img_to_array(img)
         img_array = tf.expand_dims(img_array, 0)
@@ -164,7 +162,7 @@ def predict_from_folder(folder, model, input_size, class_names):
 
         # Get the position with highest score in output predictions
         max_idx = np.argmax(pred)
-        
+
         # Get the class name
         predicted_class = class_names[max_idx]
 

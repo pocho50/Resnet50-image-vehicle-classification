@@ -63,7 +63,7 @@ def main(data_folder, output_data_folder):
 
     # create the output_data_folder folder
     os.makedirs(output_data_folder, exist_ok=True)
-    
+
     for dirpath, filename in u.walkdir(data_folder):
         # get subset name
         subset_name = os.path.basename(os.path.dirname(dirpath))
@@ -72,9 +72,14 @@ def main(data_folder, output_data_folder):
 
         # create the subset and class folder
         os.makedirs(os.path.join(output_data_folder, subset_name), exist_ok=True)
-        os.makedirs(os.path.join(output_data_folder, subset_name, class_name), exist_ok=True)
+        os.makedirs(
+            os.path.join(output_data_folder, subset_name, class_name), exist_ok=True
+        )
 
-        if(os.path.exists(os.path.join(output_data_folder, subset_name, class_name, filename))): continue
+        if os.path.exists(
+            os.path.join(output_data_folder, subset_name, class_name, filename)
+        ):
+            continue
 
         # create the image from array
         img_array = cv2.imread(os.path.join(dirpath, filename))
@@ -83,11 +88,17 @@ def main(data_folder, output_data_folder):
         box_coordinates = detection.get_vehicle_coordinates(img_array)
 
         # generate the new image from box coordinates
-        new_img_array = img_array[box_coordinates[1]:box_coordinates[3], box_coordinates[0]:box_coordinates[2],:]
+        new_img_array = img_array[
+            box_coordinates[1] : box_coordinates[3],
+            box_coordinates[0] : box_coordinates[2],
+            :,
+        ]
         new_img = Image.fromarray(new_img_array)
         # save the new image
-        new_img.save(os.path.join(output_data_folder, subset_name, class_name, filename))
-        
+        new_img.save(
+            os.path.join(output_data_folder, subset_name, class_name, filename)
+        )
+
 
 if __name__ == "__main__":
     args = parse_args()

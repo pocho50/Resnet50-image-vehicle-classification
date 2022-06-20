@@ -106,8 +106,7 @@ def main(config_file):
     # Check if number of classes is correct
     if len(class_names) != config["model"]["classes"]:
         raise ValueError(
-            "The number classes between your dataset and your model"
-            "doen't match."
+            "The number classes between your dataset and your model" "doen't match."
         )
 
     # Load training dataset

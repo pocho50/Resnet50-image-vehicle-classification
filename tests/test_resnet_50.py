@@ -43,9 +43,7 @@ class TestResnet50(unittest.TestCase):
 
         # Check output is applying GlobalAveragePooling2D
         self.assertTrue(
-            isinstance(
-                resnet50.layers[-1], keras.layers.GlobalAveragePooling2D
-            ),
+            isinstance(resnet50.layers[-1], keras.layers.GlobalAveragePooling2D),
             msg="GlobalAveragePooling2D must used as Resnet50 model output",
         )
         # Check output shape is ok

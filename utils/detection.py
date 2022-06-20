@@ -1,4 +1,3 @@
-
 # Load here your Detection model
 # The chosen detector model is "COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"
 # because this particular model has a good balance between accuracy and speed.
@@ -14,16 +13,21 @@ from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 
 cfg = get_cfg()
-# add project-specific config (e.g., TensorMask) here if you're not running a model in detectron2's core library
-cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
+cfg.merge_from_file(
+    model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")
+)
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
 # Find a model from detectron2's model zoo.
-cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
+    "COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"
+)
 
 # Assign the loaded detection model to global variable DET_MODEL
 DET_MODEL = DefaultPredictor(cfg)
 
 ALL_CLASS_NAMES = MetadataCatalog.get(cfg.DATASETS.TRAIN[0]).thing_classes
+
+
 def get_vehicle_coordinates(img):
     """
     This function will run an object detector over the the image, get
@@ -54,44 +58,47 @@ def get_vehicle_coordinates(img):
     """
     # TODO
     outputs = DET_MODEL(img)
-   
+
     # get the valid boxes
     valid_boxes = get_valid_boxes(outputs)
 
     # get the boxes with largest area
     select_box = box_with_largest_area(valid_boxes)
 
-    if (select_box is not None):
-       # get the coordinates of the box
-       x1, y1, x2, y2 = select_box.tensor.cpu().numpy()[0][:4]
-       box_coordinates = (int(x1), int(y1), int(x2), int(y2))
+    if select_box is not None:
+        # get the coordinates of the box
+        x1, y1, x2, y2 = select_box.tensor.cpu().numpy()[0][:4]
+        box_coordinates = (int(x1), int(y1), int(x2), int(y2))
     else:
-       # if is not box return the complete image
-       h, w = img.shape[:2]
-       box_coordinates = [0 , 0, w, h]
+        # if is not box return the complete image
+        h, w = img.shape[:2]
+        box_coordinates = [0, 0, w, h]
 
     return box_coordinates
 
+
 def get_valid_boxes(outputs):
-   # get the boxes detected
-   pred_boxes = outputs["instances"].pred_boxes
-   # get the clases detected
-   pred_classes = outputs["instances"].pred_classes
-   boxes = []
-   for i, class_number in enumerate(pred_classes):
-      # only valid class
-      if(valid_class(ALL_CLASS_NAMES[class_number])):
-         boxes.append(pred_boxes[i])
-   return boxes
+    # get the boxes detected
+    pred_boxes = outputs["instances"].pred_boxes
+    # get the clases detected
+    pred_classes = outputs["instances"].pred_classes
+    boxes = []
+    for i, class_number in enumerate(pred_classes):
+        # only valid class
+        if valid_class(ALL_CLASS_NAMES[class_number]):
+            boxes.append(pred_boxes[i])
+    return boxes
+
 
 def box_with_largest_area(boxes):
-   if(not boxes): return None
-   # create a list with the area each box
-   list_area_box = list(map(lambda x: x.area(), boxes))
-   # return the box with the largest area
-   return boxes[list_area_box.index(max(list_area_box))]
+    if not boxes:
+        return None
+    # create a list with the area each box
+    list_area_box = list(map(lambda x: x.area(), boxes))
+    # return the box with the largest area
+    return boxes[list_area_box.index(max(list_area_box))]
+
 
 def valid_class(class_name):
-   # only cars or trucks
-   return (class_name == 'car' or class_name == 'truck')
-
+    # only cars or trucks
+    return class_name == "car" or class_name == "truck"

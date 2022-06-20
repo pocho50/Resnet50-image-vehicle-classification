@@ -1,6 +1,7 @@
 from tensorflow import keras
 from tensorflow.keras import layers
 
+
 def create_data_aug_layer(data_aug_layer):
     """
     Use this function to parse the data augmentation methods for the
@@ -32,17 +33,17 @@ def create_data_aug_layer(data_aug_layer):
     # Append the data augmentation layers on this list
     data_aug_layers = []
 
-    if(data_aug_layer is not None):
+    if data_aug_layer is not None:
         if "random_flip" in data_aug_layer:
-            random_flip = layers.RandomFlip(**data_aug_layer['random_flip'])
+            random_flip = layers.RandomFlip(**data_aug_layer["random_flip"])
             data_aug_layers.append(random_flip)
-            
-        if("random_rotation" in data_aug_layer):
-            random_rotation = layers.RandomRotation(**data_aug_layer['random_rotation'])
+
+        if "random_rotation" in data_aug_layer:
+            random_rotation = layers.RandomRotation(**data_aug_layer["random_rotation"])
             data_aug_layers.append(random_rotation)
-            
-        if("random_zoom" in data_aug_layer):
-            random_zoom = layers.RandomZoom(**data_aug_layer['random_zoom'])
+
+        if "random_zoom" in data_aug_layer:
+            random_zoom = layers.RandomZoom(**data_aug_layer["random_zoom"])
             data_aug_layers.append(random_zoom)
 
     # Return a keras.Sequential model having the the new layers created

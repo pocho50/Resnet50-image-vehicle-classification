@@ -89,33 +89,37 @@ def main(data_folder, labels, output_data_folder):
     #      train/test and class folders
     #   3. Copy the image to the new folder structure. We recommend you to
     #      use `os.link()` to avoid wasting disk space with duplicated files
-    
-    if(not os.path.isdir(output_data_folder)):
+
+    if not os.path.isdir(output_data_folder):
         os.mkdir(output_data_folder)
 
-    with open(labels, 'r') as lab_f:
+    with open(labels, "r") as lab_f:
         rowRount = 0
-        csvreader = csv.reader(lab_f, delimiter=',')
+        csvreader = csv.reader(lab_f, delimiter=",")
         for row in csvreader:
             rowRount += 1
             # we avoid the first row
-            if(rowRount == 1): continue
+            if rowRount == 1:
+                continue
 
             sub_folder = row[2]
-            if(not os.path.isdir(os.path.join(output_data_folder, sub_folder))):
+            if not os.path.isdir(os.path.join(output_data_folder, sub_folder)):
                 os.mkdir(os.path.join(output_data_folder, sub_folder))
 
             label_folder = row[1]
-            label_folder_path = os.path.join(output_data_folder, sub_folder, label_folder)
-            if(not os.path.isdir(label_folder_path)):
+            label_folder_path = os.path.join(
+                output_data_folder, sub_folder, label_folder
+            )
+            if not os.path.isdir(label_folder_path):
                 os.mkdir(label_folder_path)
 
             image_name = row[0]
-            image_link_path = os.path.join(output_data_folder, sub_folder, label_folder, image_name)
-            image_path = os.path.join(data_folder, image_name)            
-            if(not os.path.exists(image_link_path)):
-                os.link( image_path, image_link_path)
-            
+            image_link_path = os.path.join(
+                output_data_folder, sub_folder, label_folder, image_name
+            )
+            image_path = os.path.join(data_folder, image_name)
+            if not os.path.exists(image_link_path):
+                os.link(image_path, image_link_path)
 
 
 if __name__ == "__main__":

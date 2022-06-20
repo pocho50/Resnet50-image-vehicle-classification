@@ -9,7 +9,7 @@ def create_model(
     dropout_rate: float = 0.0,
     data_aug_layer: dict = None,
     classes: int = None,
-    regulizer: float = 0.001
+    regulizer: float = 0.001,
 ):
     """
     Creates and loads the Resnet50 model we will use for our experiments.
@@ -70,12 +70,12 @@ def create_model(
         # Assign it to `input` variable
         # Use keras.layers.Input(), following this requirements:
         #   1. layer dtype must be tensorflow.float32
-        input = layers.Input(shape=input_shape, dtype = float32)
+        input = layers.Input(shape=input_shape, dtype=float32)
 
         # Create the data augmentation layers here and add to the model next
         # to the input layer
         # If no data augmentation was used, skip this
-        if(data_aug_layer is not None):
+        if data_aug_layer is not None:
             data_augmentation = create_data_aug_layer(data_aug_layer)
             x = data_augmentation(input)
         else:
@@ -94,9 +94,8 @@ def create_model(
         #   2. Drop top layer (imagenet classification layer)
         #   3. Use Global average pooling as model output
         base_model = keras.applications.ResNet50(
-                   include_top=False,
-                   pooling='avg',
-                   weights='imagenet')
+            include_top=False, pooling="avg", weights="imagenet"
+        )
 
         x = base_model(x)
 
@@ -107,14 +106,15 @@ def create_model(
         # Add the classification layer here, use keras.layers.Dense() and
         # `classes` parameter
         # Assign it to `outputs` variable
-        outputs = layers.Dense(classes, activation='softmax', kernel_regularizer=regularizers.L2(regulizer))(x)
+        outputs = layers.Dense(
+            classes, activation="softmax", kernel_regularizer=regularizers.L2(regulizer)
+        )(x)
 
         # Now you have all the layers in place, create a new model
         # Use keras.Model()
         # Assign it to `model` variable
-        # TODO
         model = keras.Model(input, outputs)
-        
+
     else:
         # For this particular case we want to load our already defined and
         # finetuned model, see how to do this using keras
