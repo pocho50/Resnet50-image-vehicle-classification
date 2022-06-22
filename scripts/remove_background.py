@@ -11,7 +11,6 @@ same directory structure with its subfolders but with new images.
 import argparse
 import os, cv2
 from utils import utils as u, detection
-from PIL import Image
 
 
 def parse_args():
@@ -93,10 +92,10 @@ def main(data_folder, output_data_folder):
             box_coordinates[0] : box_coordinates[2],
             :,
         ]
-        new_img = Image.fromarray(new_img_array)
-        # save the new image
-        new_img.save(
-            os.path.join(output_data_folder, subset_name, class_name, filename)
+
+        cv2.imwrite(
+            os.path.join(output_data_folder, subset_name, class_name, filename),
+            new_img_array,
         )
 
 
