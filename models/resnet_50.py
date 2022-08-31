@@ -12,20 +12,6 @@ def create_model(
     regulizer: float = 0.001,
 ):
     """
-    Creates and loads the Resnet50 model we will use for our experiments.
-    Depending on the `weights` parameter, this function will return one of
-    two possible keras models:
-        1. weights='imagenet': Returns a model ready for performing finetuning
-                               on your custom dataset using imagenet weights
-                               as starting point.
-        2. weights!='imagenet': Then `weights` must be a valid path to a
-                                pre-trained model on our custom dataset.
-                                This function will return a model that can
-                                be used to get predictions on our custom task.
-
-    See an extensive tutorial about finetuning with Keras here:
-    https://www.tensorflow.org/tutorials/images/transfer_learning.
-
     Parameters
     ----------
     weights : str
@@ -116,10 +102,7 @@ def create_model(
         model = keras.Model(input, outputs)
 
     else:
-        # For this particular case we want to load our already defined and
-        # finetuned model, see how to do this using keras
-        # Assign it to `model` variable
-        # TODO
+
         model = models.load_model(weights)
 
     return model

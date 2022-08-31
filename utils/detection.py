@@ -13,6 +13,7 @@ from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 
 cfg = get_cfg()
+cfg.MODEL.DEVICE = "cpu" 
 cfg.merge_from_file(
     model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")
 )

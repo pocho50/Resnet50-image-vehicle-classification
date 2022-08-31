@@ -83,12 +83,6 @@ def main(data_folder, labels, output_data_folder):
         Full path to the directory in which we will store the resulting
         train/test splits.
     """
-    # For this function, you must:
-    #   1. Load labels CSV file
-    #   2. Iterate over each row in the CSV, create the corresponding
-    #      train/test and class folders
-    #   3. Copy the image to the new folder structure. We recommend you to
-    #      use `os.link()` to avoid wasting disk space with duplicated files
 
     if not os.path.isdir(output_data_folder):
         os.mkdir(output_data_folder)
